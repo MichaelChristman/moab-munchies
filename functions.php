@@ -6,6 +6,7 @@
  *
  * @package Moab_Munchies
  */
+require_once('moab-munchies-custom-post-types.php');
 
 if ( ! function_exists( 'moab_munchies_setup' ) ) :
 	/**
