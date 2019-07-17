@@ -98,10 +98,21 @@ add_filter( 'enter_title_here', 'moab_munchies_change_title_text' );
 function moab_munchies_meta_box_init($post_type){
     if ( $post_type === 'restaurant' ) {
         
+        //Order Options
         add_meta_box( 
                 'moab_munchies_order_options_meta',       // HTML 'id' attribute of the edit screen section
                 'Order Options',                   // Title of the edit screen section, visible to user.
                 'moab_munchies_order_options_meta_box' ,   // Function that prints out the HTML for the edit screen section
+                $post_type,                         // The type of Write screen on which to show the edit screen section
+                'top',                              // The part of the page where the edit screen section should be shown.
+                'high'                              // The priority within the context where the boxes should show
+        );
+        
+        //Hours
+        add_meta_box( 
+                'moab_munchies_hours_meta',       // HTML 'id' attribute of the edit screen section
+                'Hours of Operation',                   // Title of the edit screen section, visible to user.
+                'moab_munchies_hours_meta_box' ,   // Function that prints out the HTML for the edit screen section
                 $post_type,                         // The type of Write screen on which to show the edit screen section
                 'top',                              // The part of the page where the edit screen section should be shown.
                 'high'                              // The priority within the context where the boxes should show
@@ -154,6 +165,219 @@ function moab_munchies_order_options_meta_box($post){
    <?php
 }
 
+function moab_munchies_hours_meta_box($post){
+    //call in existing post meta
+    $moab_munchies_monday_open = get_post_meta( $post->ID, '_moab_munchies_monday_open', true);
+    $moab_munchies_monday_closed = get_post_meta( $post->ID, '_moab_munchies_monday_closed', true);
+    $moab_munchies_tuesday_open = get_post_meta( $post->ID, '_moab_munchies_tuesday_open', true);
+    $moab_munchies_tuesday_closed = get_post_meta( $post->ID, '_moab_munchies_tuesday_closed', true);
+    $moab_munchies_wednesday_open = get_post_meta( $post->ID, '_moab_munchies_wednesday_open', true);
+    $moab_munchies_wednesday_closed = get_post_meta( $post->ID, '_moab_munchies_wednesday_closed', true);
+    $moab_munchies_thursday_open = get_post_meta( $post->ID, '_moab_munchies_thursday_open', true);
+    $moab_munchies_thursday_closed = get_post_meta( $post->ID, '_moab_munchies_thursday_closed', true);
+    $moab_munchies_friday_open = get_post_meta( $post->ID, '_moab_munchies_friday_open', true);
+    $moab_munchies_friday_closed = get_post_meta( $post->ID, '_moab_munchies_friday_closed', true);
+    $moab_munchies_saturday_open = get_post_meta( $post->ID, '_moab_munchies_saturday_open', true);
+    $moab_munchies_saturday_closed = get_post_meta( $post->ID, '_moab_munchies_saturday_closed', true);
+    $moab_munchies_sunday_open = get_post_meta( $post->ID, '_moab_munchies_sunday_open', true);
+    $moab_munchies_sunday_closed = get_post_meta( $post->ID, '_moab_munchies_sunday_closed', true);
+    
+    //nonce for security
+    wp_nonce_field( plugin_basename(__FILE__), 'moab_munchies_save_meta_boxes');
+    
+    ?>
+    
+    <table>
+        <tr>
+          <th>Day</th>
+          <th>Open</th> 
+          <th>Close</th>
+        </tr>
+        <tr>
+          <td>Monday</td>
+          <td>
+              <?php 
+//                echo "<script type='text/javascript'>alert('$moab_munchies_monday_open');</script>";
+                ?> 
+                <select name="moab_munchies_monday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_monday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_monday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_monday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Tuesday</td>
+          <td>
+                <select name="moab_munchies_tuesday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_tuesday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_tuesday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_tuesday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Wednesday</td>
+           <td>
+                <select name="moab_munchies_wednesday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_wednesday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_wednesday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_wednesday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Thursday</td>
+          <td>
+                <select name="moab_munchies_thursday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_thursday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_thursday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_thursday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Friday</td>
+          <td>
+                <select name="moab_munchies_friday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_friday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_friday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_friday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Saturday</td>
+          <td>
+                <select name="moab_munchies_saturday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_saturday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_saturday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_saturday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Sunday</td>
+          <td>
+                <select name="moab_munchies_sunday_open">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_sunday_open):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+          <td>
+                <select name="moab_munchies_sunday_closed">
+                <?php for($i = 0; $i < 24; $i++): ?>
+                  <?php if($i == $moab_munchies_sunday_closed):?>
+                  <option value="<?= $i; ?>" selected="selected"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php else: ?>
+                  <option value="<?= $i; ?>"><?= $i % 12 ? $i % 12 : 12 ?>:00 <?= $i >= 12 ? 'pm' : 'am' ?></option>
+                  <?php endif ?>
+                <?php endfor ?>
+                </select>
+          </td>
+        </tr>
+        
+      </table>
+    
+    
+    <?php
+}
+
 function moab_munchies_save_meta_boxes($post_id){
     
     /*****************************************
@@ -177,9 +401,82 @@ function moab_munchies_save_meta_boxes($post_id){
             
     //$mytheme_checkbox_value = ( isset( $_POST['mytheme_checkbox_value'] ) && '1' === $_POST['mytheme_checkbox_value'] ) ? 1 : 0; // Input var okay.
    // update_post_meta( $post_id, 'mytheme_checkbox_value', esc_attr( $mytheme_checkbox_value ) );
-     /*****************************************
-     *  End Order Options meta info
+    
+    /*****************************************
+     *Hours of Operation Meta Info
      ******************************************/
+    
+    //accepted values whitelist
+    $hours_allowed = [];
+    
+    foreach (range(0, 24) as $number) {
+        array_push($hours_allowed, $number);
+    }
+   
+    if( isset( $_POST['moab_munchies_monday_open'] )  && in_array($_POST['moab_munchies_monday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_monday_open',  $_POST['moab_munchies_monday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_monday_closed'] )  && in_array($_POST['moab_munchies_monday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_monday_closed',  $_POST['moab_munchies_monday_closed'] );
+
+    }if( isset( $_POST['moab_munchies_tuesday_open'] )  && in_array($_POST['moab_munchies_tueday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_tuesday_open',  $_POST['moab_munchies_tuesday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_tuesday_closed'] )  && in_array($_POST['moab_munchies_tuesday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_tuesday_closed',  $_POST['moab_munchies_tuesday_closed'] );
+
+    }if( isset( $_POST['moab_munchies_wednesday_open'] )  && in_array($_POST['moab_munchies_wednesday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_wednesday_open',  $_POST['moab_munchies_wednesday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_wednesday_closed'] )  && in_array($_POST['moab_munchies_wednesday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_wednesday_closed',  $_POST['moab_munchies_wednesday_closed'] );
+
+    }if( isset( $_POST['moab_munchies_thursday_open'] )  && in_array($_POST['moab_munchies_thursday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_thursday_open',  $_POST['moab_munchies_thursday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_thursday_closed'] )  && in_array($_POST['moab_munchies_thursday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_thursday_closed',  $_POST['moab_munchies_thursday_closed'] );
+
+    }if( isset( $_POST['moab_munchies_friday_open'] )  && in_array($_POST['moab_munchies_friday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_friday_open',  $_POST['moab_munchies_friday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_friday_closed'] )  && in_array($_POST['moab_munchies_friday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_friday_closed',  $_POST['moab_munchies_friday_closed'] );
+
+    }if( isset( $_POST['moab_munchies_saturday_open'] )  && in_array($_POST['moab_munchies_saturday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_saturday_open',  $_POST['moab_munchies_saturday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_saturday_closed'] )  && in_array($_POST['moab_munchies_saturday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_saturday_closed',  $_POST['moab_munchies_saturday_closed'] );
+
+    }if( isset( $_POST['moab_munchies_sunday_open'] )  && in_array($_POST['moab_munchies_sunday_open'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_sunday_open',  $_POST['moab_munchies_sunday_open'] );
+
+    }
+    if( isset( $_POST['moab_munchies_sunday_closed'] )  && in_array($_POST['moab_munchies_sunday_closed'], $hours_allowed)){
+
+        update_post_meta( $post_id, '_moab_munchies_sunday_closed',  $_POST['moab_munchies_sunday_closed'] );
+
+    }
     
 }
 //hook to save our meta box data when the post is saved
